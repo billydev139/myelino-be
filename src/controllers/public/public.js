@@ -12,7 +12,7 @@ export const subscribeEmail = async (req, res) => {
     email: email,
   });
   await newEmail.save();
-  return res.status(201).json({ message: "Subscribe Email successfully" });
+  return res.status(201).json({ message: "Email Sent Successfully" });
 };
 
 export const getSubscribeEmail = async (req, res) => {
