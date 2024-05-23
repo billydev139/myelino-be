@@ -1,10 +1,29 @@
 import express from "express";
 const router = express.Router();
+import Admin from "../models/admin.js"
 import {
   subscribeEmail,
   getSubscribeEmail,
-  exportEmail,
 } from "../controllers/public/public.js";
+
+export const isAuth = async (req, res, next) => {
+  try {
+    
+   let  password = req.body.password
+      console.log("🚀 ~ isAuth ~ password:", password)
+      let  admin = await Admin.findOne({ password: password });
+      console.log("🚀 ~ isAuth ~ admin:", admin)
+    if (!admin) {
+      return res.status(401).json({
+        message: "Invalid Password",
+      });
+    }
+    next();
+  } catch (error) {
+    return sendError(res, error);
+  }
+};
+
 
 /**
  * @swagger
@@ -49,10 +68,27 @@ router.route("/subscribeEmail").post(subscribeEmail);
  * @swagger
  * components:
  *   schemas:
+ *         password:
+ *           type: string
+ *           format: password
+ *           description: The password for authentication
+ *
  * /public/getSubscribeEmail:
- *   get:
+ *   post:
  *     summary: Retrieve a list of all subscribed emails
- *     tags: [Emails]
+ *     tags: 
+ *       - Emails
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: The password for authentication
  *     responses:
  *       200:
  *         description: A list of all subscribed emails
@@ -63,6 +99,7 @@ router.route("/subscribeEmail").post(subscribeEmail);
  *       500:
  *         description: Internal server error
  */
-router.route("/getSubscribeEmail").get(getSubscribeEmail);
+
+router.route("/getSubscribeEmail").post(isAuth,getSubscribeEmail);
 
 export default router;
