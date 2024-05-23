@@ -103,3 +103,4 @@ router.route("/subscribeEmail").post(subscribeEmail);
 router.route("/getSubscribeEmail").post(isAuth,getSubscribeEmail);
 
 export default router;
+ 
