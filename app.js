@@ -3,7 +3,17 @@ import cors from "cors";
 import public_route from "./src/routes/public.js";
 import bodyparser from "body-parser";
 export const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: "https://myelino.com/", // Replace with your frontend domain
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
+// Enable preflight requests for all routes
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));

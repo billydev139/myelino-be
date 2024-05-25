@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import Admin from "../models/admin.js"
+import Admin from "../models/admin.js";
 import {
   subscribeEmail,
   getSubscribeEmail,
@@ -8,11 +8,10 @@ import {
 
 export const isAuth = async (req, res, next) => {
   try {
-    
-   let  password = req.body.password
-      console.log("🚀 ~ isAuth ~ password:", password)
-      let  admin = await Admin.findOne({ password: password });
-      console.log("🚀 ~ isAuth ~ admin:", admin)
+    let password = req.body.password;
+    console.log("🚀 ~ isAuth ~ password:", password);
+    let admin = await Admin.findOne({ password: password });
+    console.log("🚀 ~ isAuth ~ admin:", admin);
     if (!admin) {
       return res.status(401).json({
         message: "Invalid Password",
@@ -23,7 +22,6 @@ export const isAuth = async (req, res, next) => {
     return sendError(res, error);
   }
 };
-
 
 /**
  * @swagger
@@ -38,7 +36,6 @@ export const isAuth = async (req, res, next) => {
  *           type: string
  *           description: The email address of the user
  *           example: user@example.com
- *
  * /public/subscribeEmail:
  *   post:
  *     summary: Create a new email
@@ -68,15 +65,24 @@ router.route("/subscribeEmail").post(subscribeEmail);
  * @swagger
  * components:
  *   schemas:
- *         password:
+ *     password:
+ *       type: string
+ *       format: password
+ *       description: The password for authentication
+ *     EmailResponse:
+ *       type: object
+ *       properties:
+ *         email:
  *           type: string
- *           format: password
- *           description: The password for authentication
+ *           description: The email address of the subscriber
+ *         subscribed:
+ *           type: boolean
+ *           description: Subscription status of the email
  *
  * /public/getSubscribeEmail:
  *   post:
  *     summary: Retrieve a list of all subscribed emails
- *     tags: 
+ *     tags:
  *       - Emails
  *     requestBody:
  *       required: true
@@ -100,7 +106,6 @@ router.route("/subscribeEmail").post(subscribeEmail);
  *         description: Internal server error
  */
 
-router.route("/getSubscribeEmail").post(isAuth,getSubscribeEmail);
+router.route("/getSubscribeEmail").post(isAuth, getSubscribeEmail);
 
 export default router;
- 
