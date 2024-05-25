@@ -5,15 +5,13 @@ import bodyparser from "body-parser";
 export const app = express();
 
 const corsOptions = {
-  origin: "https://myelino.com/", // Replace with your frontend domain
+  origin: "https://myelino.com", // Replace with your frontend domain
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
 
-// Enable preflight requests for all routes
-app.options("*", cors(corsOptions));
 
 app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.url}`);
